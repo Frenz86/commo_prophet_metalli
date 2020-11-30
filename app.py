@@ -7,7 +7,15 @@ from matplotlib import pyplot as plt
 from fbprophet import Prophet
 from fbprophet.plot import plot_plotly
 
-# Security
+#to monitor logging
+import csv
+from datetime import datetime as dt
+import base64
+import gspread
+
+st.set_option('deprecation.showPyplotGlobalUse', False)
+
+# Security##
 #passlib,hashlib,bcrypt,scrypt
 import hashlib
 def make_hashes(password):
@@ -41,7 +49,17 @@ def view_all_users():
 	data = c.fetchall()
 	return data
 
+### to monitor the logging
+def get_time():
+    d = dt.now().strftime("%Y-%m-%d-%H:%M:%S")
+    return d
 
+def write_data_on_csv(filename, listdata):
+    with open(filename, mode='a') as f:
+        fw = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        fw.writerow(listdata)
+
+name = 'COMMODITY-METALLI'
 
 def main():
 	"""Simple Login App"""
@@ -73,7 +91,24 @@ def main():
 
 			result = login_user(username,check_hashes(password,hashed_pswd))
 			if result:
+                ########    WRITE CSV AS LOGGED TIMESTAMP ###########
 				#st.success("Logged In as {}".format(username))
+				log = ("{}".format(username))
+				time_print = get_time()
+				#write_data_on_csv(filename="login.csv",listdata=[time_print,name,log]) # to wite csv in local
+				print("Logged In as {}".format(username))
+				gc = gspread.service_account(filename='credentials.json')
+				sh = gc.open("Login_webapp")
+				worksheet = sh.sheet1
+				#print(len(res))
+				listdata=[time_print,name,log]
+				worksheet.append_row(listdata)# no specify the row
+				### retrieve data ###
+				res = worksheet.get_all_records() # list of dictionaries
+				res = worksheet.get_all_values() # list of lists
+				print(res)
+
+				### Load COMMODITY
 				commodity_transl = ['Oro','Rame','Argento','Palladio','Platino','Alluminio','Zinco','Piombo','Nichel','Stagno',
 				'Rame',"Xetra-Oro","MCX Aluminio Mini",'MCX Aluminio',"MCX Rame","MCX Rame Mini","MCX Oro 1 Kg","MCX Oro Guinea",
 				"MCX Oro Mini","MCX oro Petal","MCX Oro Petal Del","MCX Piombo","MCX Piombo Mini","MCX Nickel",
