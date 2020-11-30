@@ -59,7 +59,7 @@ def write_data_on_csv(filename, listdata):
         fw = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         fw.writerow(listdata)
 
-name = 'COMMODITY-METALLI'
+name = 'COMMODITY-ENERGY'
 
 def main():
 	"""Simple Login App"""
