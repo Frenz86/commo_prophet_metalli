@@ -62,6 +62,17 @@ def write_data_on_csv(filename, listdata):
 name = 'COMMODITY-ENERGY'
 
 def main():
+	# ################ css background #########################
+	page_bg_img = '''
+	<style>
+	body {
+	background-image: url("https://i.pinimg.com/originals/85/6f/31/856f31d9f475501c7552c97dbe727319.jpg");
+	background-size: cover;
+	}
+	</style>
+	'''
+	st.markdown(page_bg_img, unsafe_allow_html=True)
+############################################################
 	"""Simple Login App"""
 
 	################ load logo from web #########################
