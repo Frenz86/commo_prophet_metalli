@@ -73,7 +73,7 @@ def main():
 	'''
 	st.markdown(page_bg_img, unsafe_allow_html=True)
 ############################################################
-##	"""Simple Login App"""
+	"""Simple Login App"""
 
 	################ load logo from web #########################
 	from PIL import Image
@@ -295,18 +295,8 @@ def main():
 
 				#st.markdown(f"<span style='color: blue;font-size: 20px;font-weight: bold;'> - Prezzo {list(COMMODITY.values())[list(COMMODITY.keys()).index(option)]} predetto in data {start_date2} : $ {fore_value}</span>",
 				#			unsafe_allow_html=True)
-				st.markdown(f"<span style='color: blue;font-size: 20px;font-weight: bold;'> - Prezzo {list(COMMODITY.values())[list(COMMODITY.keys()).index(option)]} predetto in data {start_date2} : $ {fore_value} </span>",
+				st.markdown(f"<span style='color: blue;font-size: 20px;font-weight: bold;'> - Prezzo {list(COMMODITY.values())[list(COMMODITY.keys()).index(option)]} predetto in data {start_date2} : € {fore_eur}</span>",
 							unsafe_allow_html=True)
-######################## new tass di cambio ##########################
-				tassvar = st.slider('Selezionare un tasso di cambio $/€ ', 
-							min_value=0.5,
-							max_value=1.1,
-							value=tasso_camb,  
-							step=0.01)
-				fore_eur2 =round(fore_value*tassvar,2)
-				st.markdown(f"<span style='color: blue;font-size: 20px;font-weight: bold;'> - Prezzo {list(COMMODITY.values())[list(COMMODITY.keys()).index(option)]} predetto in data {start_date2} : € {fore_eur2}</span>",
-							unsafe_allow_html=True)
-##########################################################################
 
 				fig = plot_plotly(model, forecast)
 				fig.update_layout( 
