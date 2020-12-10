@@ -164,7 +164,7 @@ def main():
 				COMMODITY = dict(zipbObj)
 
 		##		option0 = st.selectbox( '',('Metalli', 'Beni Alimentari', 'Energia'))
-                option0 = st.selectbox( '',('Metalli',''))
+				option0 = st.selectbox( '',('Metalli',''))
 				#st.write('You selected:', option0)
 
 				keys_to_extract_comm1 = ['Gold','Copper','Silver','Palladium','Platinum','Aluminum','Zinc','Lead','Nickel','Tin','Copper','Xetra-Gold',
