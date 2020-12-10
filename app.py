@@ -180,18 +180,18 @@ def main():
 				'MCX Crude Oil WTI','MCX Natural Gas']
 
 				COMMODITY_1 = {key: COMMODITY[key] for key in keys_to_extract_comm1}
-				#COMMODITY_2 = {key: COMMODITY[key] for key in keys_to_extract_comm2}
-				#COMMODITY_3 = {key: COMMODITY[key] for key in keys_to_extract_comm3}
+	##			#COMMODITY_2 = {key: COMMODITY[key] for key in keys_to_extract_comm2}
+	##			#COMMODITY_3 = {key: COMMODITY[key] for key in keys_to_extract_comm3}
 
 				def format_func(option0):
 					return COMMODITY[option0]
 
 				if option0 == 'Metalli':
 					COMMODITY = COMMODITY_1
-				# elif option0 == 'Beni Alimentari':
-				# 	COMMODITY = COMMODITY_2
-				# else:
-				# 	COMMODITY = COMMODITY_3
+	#			# elif option0 == 'Beni Alimentari':
+	#			# 	COMMODITY = COMMODITY_2
+	#			# else:
+	#			# 	COMMODITY = COMMODITY_3
 
 				option = st.selectbox("", options=list(COMMODITY.keys()), format_func=format_func)
 				#st.write(f"..... {option}")
