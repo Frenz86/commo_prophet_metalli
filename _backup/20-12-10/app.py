@@ -26,7 +26,7 @@ def check_hashes(password,hashed_text):
 		return hashed_text
 	return False
 # DB Management
-import sqlite3
+import sqlite3 
 conn = sqlite3.connect('data.db')
 c = conn.cursor()
 # DB  Functions
@@ -59,7 +59,7 @@ def write_data_on_csv(filename, listdata):
         fw = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         fw.writerow(listdata)
 
-name = 'COMMODITY-FULL'
+name = 'COMMODITY-ENERGY'
 
 def main():
 	# ################ css background #########################
@@ -73,6 +73,8 @@ def main():
 	'''
 	st.markdown(page_bg_img, unsafe_allow_html=True)
 ############################################################
+##	"""Simple Login App"""
+
 	################ load logo from web #########################
 	from PIL import Image
 	import requests
@@ -135,16 +137,16 @@ def main():
 					def __init__(self,url):
 						self.data= requests.get(url).json()
 						self.currencies = self.data['rates']
-
-					def convert(self, from_currency, to_currency, amount):
-						initial_amount = amount
+					
+					def convert(self, from_currency, to_currency, amount): 
+						initial_amount = amount 
 						#first convert it into USD if it is not in USD.
 						# because our base currency is USD
-						if from_currency != 'USD' :
-							amount = amount / self.currencies[from_currency]
+						if from_currency != 'USD' : 
+							amount = amount / self.currencies[from_currency] 
 
-						# limiting the precision to 4 decimal places
-						amount = round(amount * self.currencies[to_currency], 4)
+						# limiting the precision to 4 decimal places 
+						amount = round(amount * self.currencies[to_currency], 4) 
 						return amount
 
 				curr = ['USD','AUD','EUR','GBP']
@@ -163,7 +165,7 @@ def main():
 				# Create a dictionary from zip object
 				COMMODITY = dict(zipbObj)
 
-				option0 = st.selectbox( '',('Metalli', 'Beni Alimentari', 'Energia'))
+				option0 = st.selectbox( '',('Metalli',''))
 				#st.write('You selected:', option0)
 
 				keys_to_extract_comm1 = ['Gold','Copper','Silver','Palladium','Platinum','Aluminum','Zinc','Lead','Nickel','Tin','Copper','Xetra-Gold',
@@ -179,18 +181,13 @@ def main():
 				'MCX Crude Oil WTI','MCX Natural Gas']
 
 				COMMODITY_1 = {key: COMMODITY[key] for key in keys_to_extract_comm1}
-				#COMMODITY_2 = {key: COMMODITY[key] for key in keys_to_extract_comm2}
-				#COMMODITY_3 = {key: COMMODITY[key] for key in keys_to_extract_comm3}
+
 
 				def format_func(option0):
 					return COMMODITY[option0]
 
 				if option0 == 'Metalli':
 					COMMODITY = COMMODITY_1
-				# elif option0 == 'Beni Alimentari':
-				# 	COMMODITY = COMMODITY_2
-				# else:
-				# 	COMMODITY = COMMODITY_3
 
 				option = st.selectbox("", options=list(COMMODITY.keys()), format_func=format_func)
 				#st.write(f"..... {option}")
@@ -205,8 +202,8 @@ def main():
 
 				#asset = st.sidebar.selectbox('Selezionare la Commodity',commodity_)
 
-				commo = investpy.get_commodity_historical_data(commodity=option,
-															from_date='01/01/1980',
+				commo = investpy.get_commodity_historical_data(commodity=option, 
+															from_date='01/01/1980', 
 															to_date=today,
 															as_json=False,
 															order='ascending')
@@ -220,10 +217,10 @@ def main():
 				data_reversed = data.iloc[::-1]
 				#st.dataframe(data_reversed)
 				#################################
-				section = 600 #st.slider('numero dati temporali',
+				section = 600 #st.slider('numero dati temporali', 
 											# min_value=30,
 											# max_value=min([2000, data.shape[0]]),
-										# value=600,
+										# value=600,  
 										# step=10)
 				#section=600
 				data2 = data[-section:]['Close'].to_frame('Price')
@@ -246,10 +243,9 @@ def main():
 ##############
 
 				odierno = round((data_reversed['Close'][0])*tasso_camb,2)
-				dollaro = round((data_reversed['Close'][0])*1,2)
-				#st.write("### Tasso di cambio $/€ odierno  :  " +str(tasso_camb))
-				st.write("### Prezzo odierno : $ "+str(dollaro))
-
+				st.write("### Tasso di cambio $/€ odierno  :  " +str(tasso_camb))
+				st.write("### Prezzo odierno : € "+str(odierno))
+				
 				today2 = datetime.date.today()
 				trentadays = today2 + datetime.timedelta(days=30)
 				week1 = today2 + datetime.timedelta(days=7)
@@ -258,41 +254,32 @@ def main():
 
 				fore_week1 = forecast.loc[forecast['ds'] == str(week1),['yhat']].values
 				fore_week1 = round(fore_week1[0][0],2)
-				#fore_week1 =round(fore_week1*tasso_camb,2)
-
+				fore_week1 =round(fore_week1*tasso_camb,2)
+	
 				fore_week2 = forecast.loc[forecast['ds'] == str(week2),['yhat']].values
 				fore_week2 = round(fore_week2[0][0],2)
-				#fore_week2 =round(fore_week2*tasso_camb,2)
-
+				fore_week2 =round(fore_week2*tasso_camb,2)
+				
 				fore_month = forecast.loc[forecast['ds'] == str(month),['yhat']].values
-				fore_month = round(fore_month[0][0],2)
-				#fore_month = round(fore_month*tasso_camb,2)
+				fore_month = fore_month[0][0]
+				fore_month = round(fore_month*tasso_camb,2)
 
-				st.write("* #### Previsione a 7 giorni : $ "+str(fore_week1))
-				st.write("* #### Previsione a 14 giorni : $ "+str(fore_week2))
-				st.write("* #### Previsione a 30 giorni : $ "+str(fore_month))
+				st.write("* #### Previsione a 7 giorni : € "+str(fore_week1))
+				st.write("* #### Previsione a 14 giorni : € "+str(fore_week2))
+				st.write("* #### Previsione a 30 giorni : € "+str(fore_month))
 
 
 
 ##################
 
 				st.write("#### Selezionare intervallo massimo di predizione(in giorni):")
-				windows = st.slider('',
+				windows = st.slider('', 
 											min_value=1,
 											max_value=180,
-											value=60,
+											value=60,  
 											step=1)
 
-				model = Prophet(changepoint_prior_scale=0.5,
-                    			seasonality_mode='multiplicative',
-								changepoint_range=0.8,
-								seasonality_prior_scale=2,
-								#holidays_prior_scale= 1,
-								#seasonality_mode='additive',
-								#growth='logistic',
-								yearly_seasonality= 10
-								)
-
+				model = Prophet()
 				model.fit(data2)
 				future = model.make_future_dataframe(periods=windows,freq = 'B')
 				forecast = model.predict(future)
@@ -311,10 +298,10 @@ def main():
 				st.markdown(f"<span style='color: blue;font-size: 20px;font-weight: bold;'> - Prezzo {list(COMMODITY.values())[list(COMMODITY.keys()).index(option)]} predetto in data {start_date2} : $ {fore_value} </span>",
 							unsafe_allow_html=True)
 ######################## new tass di cambio ##########################
-				tassvar = st.slider('Selezionare un tasso di cambio $/€ ',
-							min_value=0.60,
-							max_value=1.10,
-							value=tasso_camb,
+				tassvar = st.slider('Selezionare un tasso di cambio $/€ ', 
+							min_value=0.5,
+							max_value=1.1,
+							value=tasso_camb,  
 							step=0.01)
 				fore_eur2 =round(fore_value*tassvar,2)
 				st.markdown(f"<span style='color: blue;font-size: 20px;font-weight: bold;'> - Prezzo {list(COMMODITY.values())[list(COMMODITY.keys()).index(option)]} predetto in data {start_date2} : € {fore_eur2}</span>",
@@ -322,7 +309,7 @@ def main():
 ##########################################################################
 
 				fig = plot_plotly(model, forecast)
-				fig.update_layout(
+				fig.update_layout( 
 								yaxis_title='Prezzo '+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)])+' $',
 								xaxis_title="Data",
 				)
@@ -337,39 +324,13 @@ def main():
 				plt.legend()
 				st.pyplot()
 
-				forecast_ = forecast.iloc[::-1]
-				forecast_ = forecast_[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
-				forecast_.columns=["Data", "Prezzo", "Prezzo Min","Prezzo Max"]
-				#st.dataframe(forecast_)
-
-				data_reversed_ = data_reversed.copy()
-				data_reversed_ = data_reversed_.iloc[::-1]
-				data_reversed_.index =data_reversed_.index.set_names(['Data'])
-				data_reversed_ = data_reversed_.reset_index()
-				#st.dataframe(data_reversed_)
-				st.write("## Analisi Performance Predictive")
-				data_reversed_ = data_reversed_[['Data','Close']]
-				aa = pd.merge(forecast_, data_reversed_, how='left', on='Data')
-				aa.columns=["Data", "Prezzo", "Prezzo Min","Prezzo Max","Prezzo Reale"]
-				aa['Delta'] = abs(aa['Prezzo']-aa["Prezzo Reale"])
-				aa['err%'] = aa['Delta']/aa["Prezzo Reale"]*100
-				aa[['err%']] = aa[['err%']].applymap("{0:.2f} %".format)
-				aa = aa.round(decimals=2)
-				aa[["Prezzo", "Prezzo Min","Prezzo Max","Prezzo Reale","Delta"]] = aa[["Prezzo", "Prezzo Min","Prezzo Max","Prezzo Reale","Delta"]].applymap("$ {0:.2f}".format)
-				aa['Data'] = pd.to_datetime(aa['Data']).dt.normalize()
-				st.dataframe(aa)
-
 ################################
 				st.write("## Analisi storica commodity")
 				#st.write("### Prezzo commodity "+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)]+" in data:") )
-				data_reversed1 = data_reversed[['Close']].applymap("$ {0:.2f}".format)
-				data_reversed1['Close']=data_reversed1
-				data_reversed1.columns=["Prezzi Storici"]
-				#data_reversed1=data_reversed['Close']
-				st.dataframe(data_reversed1)
-
+				st.dataframe(data_reversed)
+	
 				#st.write("#### selezionare date antecedentia quella odierna: ")
-
+	
 				today_ = datetime.date.today()
 				today3=datetime.date.today().strftime('%Y-%m-%d')
 				#trentadays = today2 + datetime.timedelta(days=30)
@@ -377,9 +338,8 @@ def main():
 				start_date = st.date_input('',today_)
 				date = round(data_reversed['Close'][0],2)
 				date_eur =round(date*tasso_camb,2)
-				st.write("  * ### Prezzo giornaliero '"+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)])+"' :  $ " +str(date))
-				#st.text(f"Tasso di cambio $/€ odierno applicato: {tasso_camb}")
-				#st.write("  * ### Prezzo '"+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)])+"' in euro :  € " +str(date_eur))
+				st.write("  * ### Prezzo giornaliero '"+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)])+"' :  $" +str(date))
+				st.write("  * ### Prezzo '"+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)])+"' in euro :  € " +str(date_eur))
 				#st.text(f"Tasso di cambio $/€ odierno : {tasso_camb}")
 				#st.text(f"Valore commodity in € : {date_eur}")
 
@@ -396,11 +356,11 @@ def main():
 										dict(count = 9,label = '3y',step='year',stepmode = "backward"),
 										dict(count = 15,label = '5y',step='year',stepmode = "backward"),
 										dict(step= 'all')
-											])
+											])        
 										)
 								)
 
-				fig2.update_layout(yaxis_title='Prezzo '+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)])+' $ ',
+				fig2.update_layout(yaxis_title='Prezzo '+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)])+' $',
 								xaxis_title="Intervallo temporale")
 				st.plotly_chart(fig2)
 
