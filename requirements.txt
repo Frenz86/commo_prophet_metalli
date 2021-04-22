@@ -1,11 +1,18 @@
-fbprophet
-matplotlib==3.2.2
-lxml==4.4.1
-pandas==1.0.5
-plotly==4.8.2
-pystan==2.19.1.1
+numpy
+matplotlib
+pandas
+pillow
+seaborn
 streamlit
+streamlit-folium
+plotly
+scipy
+lxml
 investpy
 datetime
-pillow
 gspread
+markdown
+joblib
+pystan==2.19.1.1
+fbprophet ==0.7.1
+openpyxl
