@@ -243,7 +243,10 @@ def main():
                     yaxis_title='Prezzo '+str(list(COMMODITY.values())[list(COMMODITY.keys()).index(option)])+' $',
                     xaxis_title="Data",
     )
+#################### vertical line ############
+    fig.add_vline(x=date.today(), line_width=3, line_dash="dash", line_color="red")
 
+##############################################
     st.plotly_chart(fig)
 
     ##########################################
