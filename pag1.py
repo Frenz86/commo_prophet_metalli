@@ -154,19 +154,36 @@ def main():
         #st.dataframe(data2)
     else:
         st.write("Non è stato escluso nessun intervallo temporale")
-
-    windows0=60
-    model = Prophet()
-    model.fit(data2)
-    future = model.make_future_dataframe(periods=windows0)
-    forecast = model.predict(future)
 ##############
 
-    odierno = round((data_reversed['Close'][0])*tasso_camb,2)
+    #odierno = round((data_reversed['Close'][0])*tasso_camb,2)
     dollaro = round((data_reversed['Close'][0])*1,2)
     #st.write("### Tasso di cambio $/€ odierno  :  " +str(tasso_camb))
     st.write("### Prezzo odierno : $ "+str(dollaro))
-    
+
+
+##################
+    st.write("#### Selezionare intervallo massimo di predizione(in giorni):")
+    windows = st.slider('', 
+                            min_value=1,
+                            max_value=180,
+                            value=60,  
+                            step=1)
+
+    model = Prophet(changepoint_prior_scale=0.5,
+                    seasonality_mode='multiplicative',
+                    changepoint_range=0.8,
+                    seasonality_prior_scale=2,
+                    #holidays_prior_scale= 1,
+                    #seasonality_mode='additive',
+                    #growth='logistic', 
+                    yearly_seasonality= 10
+                    )
+
+    model.fit(data2)
+    future = model.make_future_dataframe(periods=windows,freq = 'B')
+    forecast = model.predict(future)
+
     today2 = date.today()
     trentadays = today2 + timedelta(days=30)
     week1 = today2 + timedelta(days=7)
@@ -189,37 +206,12 @@ def main():
     st.write("* #### Previsione a 14 giorni : $ "+str(fore_week2))
     st.write("* #### Previsione a 30 giorni : $ "+str(fore_month))
 
-
-
-##################
-
-    st.write("#### Selezionare intervallo massimo di predizione(in giorni):")
-    windows = st.slider('', 
-                                min_value=1,
-                                max_value=180,
-                                value=60,  
-                                step=1)
-
-    model = Prophet(changepoint_prior_scale=0.5,
-                    seasonality_mode='multiplicative',
-                    changepoint_range=0.8,
-                    seasonality_prior_scale=2,
-                    #holidays_prior_scale= 1,
-                    #seasonality_mode='additive',
-                    #growth='logistic', 
-                    yearly_seasonality= 10
-                    )
-
-    model.fit(data2)
-    future = model.make_future_dataframe(periods=windows,freq = 'B')
-    forecast = model.predict(future)
-
     st.write("### Se si preferisce, selezionare una data specifica di predizione :")
     start_date2 = st.date_input('', week2)
     start_date2 = str(start_date2)
     fore_value = forecast.loc[forecast['ds'] == start_date2,['yhat']].values
     fore_value = round(fore_value[0][0],2)
-    fore_eur =round(fore_value*tasso_camb,2)
+    #fore_eur =round(fore_value*tasso_camb,2)
     #st.write("* ### Prezzo predetto in data "+start_date2+" : $ "+str(fore_value))
     #st.write("* ### Prezzo predetto in data "+start_date2+" : € "+str(fore_eur))
 
